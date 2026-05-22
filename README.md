@@ -23,4 +23,16 @@ and more.
 - The C++ workspace config now points to `g++.exe`.
 - A build task is set up in VS Code for local compilation.
 
-Next step: continue implementing the HTTP server in `src/main.cpp` and build it with `./your_program.sh` or the VS Code task.
+Test 1: ✅ PASSED — GET / returned 200 OK
+
+Test 2 had a timeout because server exits after one connection. Let me test again with fresh server:
+
+✅ Both tests PASSED!
+
+| Test | Path       | Expected        | Got             | Status   |
+| ---- | ---------- | --------------- | --------------- | -------- |
+| 1    | `/`        | `200 OK`        | `200 OK`        | ✅ PASSED |
+| 2    | `/abcdefg` | `404 Not Found` | `404 Not Found` | ✅ PASSED |
+
+
+Next step: continue implementing theAdd connection loop — Server stays running, handles multiple requests
