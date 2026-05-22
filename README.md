@@ -16,24 +16,13 @@ and more.
 **Note**: If you're viewing this repo on GitHub, head over to
 [codecrafters.io](https://codecrafters.io) to try the challenge.
 
-## Passing the first stage
+## What’s done so far
 
-The entry point for your HTTP server implementation is in `src/main.cpp`. Study
-and uncomment the relevant code, and then run the command below to execute the
-tests on our servers:
+- The project is renamed to HTTP SERVER.
+- The Git repository is initialized and linked to GitHub.
+- The local folder matches the repo name.
+- MinGW is configured to use `D:\MinGW`.
+- The C++ workspace config now points to `g++.exe`.
+- A build task is set up in VS Code for local compilation.
 
-```sh
-codecrafters submit
-```
-
-Time to move on to the next stage!
-
-## Stage 2 & beyond
-
-Note: This section is for stages 2 and beyond.
-
-1. Ensure you have `cmake` installed locally
-1. Run `./your_program.sh` to run your program, which is implemented in
-   `src/main.cpp`.
-1. Run `codecrafters submit` to submit your solution to CodeCrafters. Test
-   output will be streamed to your terminal.
+Next step: continue implementing the HTTP server in `src/main.cpp` and build it with `./your_program.sh` or the VS Code task.
