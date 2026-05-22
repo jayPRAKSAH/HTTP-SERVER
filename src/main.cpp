@@ -18,6 +18,14 @@ int main(int argc, char **argv) {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
+  #ifdef _WIN32
+  WSADATA wsa_data;
+  if (WSAStartup(MAKEWORD(2, 2), &wsa_data) != 0) {
+    std::cerr << "WSAStartup failed\n";
+    return 1;
+  }
+  #endif
+
   // You can use print statements as follows for debugging, they'll be visible
   // when running tests.
   std::cout << "Logs from your program will appear here!\n";
@@ -31,7 +39,7 @@ int main(int argc, char **argv) {
   // Since the tester restarts your program quite often, setting SO_REUSEADDR
   // ensures that we don't run into 'Address already in use' errors
   int reuse = 1;
-  if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) <
+  if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, (const char *)&reuse, sizeof(reuse)) <
       0) {
     std::cerr << "setsockopt failed\n";
     return 1;
@@ -84,8 +92,14 @@ int main(int argc, char **argv) {
 
   send(client_fd, response, strlen(response), 0);
 
+  #ifdef _WIN32
+  closesocket(client_fd);
+  closesocket(server_fd);
+  WSACleanup();
+  #else
   close(client_fd);
   close(server_fd);
+  #endif
 
   return 0;
 }
