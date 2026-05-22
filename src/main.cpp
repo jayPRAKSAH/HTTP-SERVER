@@ -1,37 +1,38 @@
-#include <iostream>
 #include <cstdlib>
-#include <string>
 #include <cstring>
-
+#include <iostream>
+#include <string>
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #else
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
 #endif
 
 int main(int argc, char **argv) {
   // Flush after every std::cout / std::cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
-  
-  // You can use print statements as follows for debugging, they'll be visible when running tests.
+
+  // You can use print statements as follows for debugging, they'll be visible
+  // when running tests.
   std::cout << "Logs from your program will appear here!\n";
 
   int server_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (server_fd < 0) {
-   std::cerr << "Failed to create server socket\n";
-   return 1;
+    std::cerr << "Failed to create server socket\n";
+    return 1;
   }
 
   // Since the tester restarts your program quite often, setting SO_REUSEADDR
   // ensures that we don't run into 'Address already in use' errors
   int reuse = 1;
-  if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0) {
+  if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) <
+      0) {
     std::cerr << "setsockopt failed\n";
     return 1;
   }
@@ -41,7 +42,8 @@ int main(int argc, char **argv) {
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port = htons(4221);
 
-  if (bind(server_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) != 0) {
+  if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) !=
+      0) {
     std::cerr << "Failed to bind to port 4221\n";
     return 1;
   }
@@ -57,9 +59,14 @@ int main(int argc, char **argv) {
 
   std::cout << "Waiting for a client to connect...\n";
 
-  accept(server_fd, (struct sockaddr *) &client_addr, (socklen_t *) &client_addr_len);
+  int client_fd = accept(server_fd, (struct sockaddr *)&client_addr,
+                         (socklen_t *)&client_addr_len);
   std::cout << "Client connected\n";
 
+  const char *response = "HTTP/1.1 200 OK\r\n\r\n";
+  send(client_fd, response, strlen(response), 0);
+
+  close(client_fd);
   close(server_fd);
 
   return 0;
