@@ -1,3 +1,5 @@
+# HTTP SERVER
+
 [![progress-banner](https://backend.codecrafters.io/progress/http-server/518ef942-76ba-4a94-8e81-564d06ddd140)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
 
 This is a starting point for C++ solutions to the
@@ -14,7 +16,7 @@ and more.
 **Note**: If you're viewing this repo on GitHub, head over to
 [codecrafters.io](https://codecrafters.io) to try the challenge.
 
-# Passing the first stage
+## Passing the first stage
 
 The entry point for your HTTP server implementation is in `src/main.cpp`. Study
 and uncomment the relevant code, and then run the command below to execute the
@@ -26,7 +28,7 @@ codecrafters submit
 
 Time to move on to the next stage!
 
-# Stage 2 & beyond
+## Stage 2 & beyond
 
 Note: This section is for stages 2 and beyond.
 

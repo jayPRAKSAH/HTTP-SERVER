@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(http-server-starter-cpp)
+project(HTTP_SERVER)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp src/*.hpp)
 
