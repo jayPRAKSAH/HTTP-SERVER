@@ -63,7 +63,25 @@ int main(int argc, char **argv) {
                          (socklen_t *)&client_addr_len);
   std::cout << "Client connected\n";
 
-  const char *response = "HTTP/1.1 200 OK\r\n\r\n";
+  // Read the HTTP request
+  char buffer[1024] = {0};
+  recv(client_fd, buffer, sizeof(buffer), 0);
+
+  // Parse the request line to extract the path
+  // Format: GET /path HTTP/1.1\r\n
+  std::string request(buffer);
+  size_t first_space = request.find(' ');
+  size_t second_space = request.find(' ', first_space + 1);
+  std::string path = request.substr(first_space + 1, second_space - first_space - 1);
+
+  // Determine response based on path
+  const char *response;
+  if (path == "/") {
+    response = "HTTP/1.1 200 OK\r\n\r\n";
+  } else {
+    response = "HTTP/1.1 404 Not Found\r\n\r\n";
+  }
+
   send(client_fd, response, strlen(response), 0);
 
   close(client_fd);
