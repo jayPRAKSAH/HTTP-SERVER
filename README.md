@@ -16,23 +16,31 @@ and more.
 
 ## What’s done so far
 
-- The project is renamed to HTTP SERVER.
-- The Git repository is initialized and linked to GitHub.
-- The local folder matches the repo name.
-- MinGW is configured to use `D:\MinGW`.
-- The C++ workspace config now points to `g++.exe`.
-- A build task is set up in VS Code for local compilation.
+### Setup & repository
 
-Test 1: ✅ PASSED — GET / returned 200 OK
+- The project is renamed to HTTP SERVER and the Git repository is initialized.
+- Local workspace configured for MinGW and `g++` with a VS Code build task.
 
-Test 2 had a timeout because server exits after one connection. Let me test again with fresh server:
+### Roadmap progress (completed)
 
-✅ Both tests PASSED!
+- Stage 1 — Bind to port 4221: ✅ implemented (socket, bind, listen)
+- Stage 2 — Respond with 200: ✅ implemented (returns 200 OK)
+- Stage 3 — Extract URL path: ✅ implemented (returns 200 for `/`, 404 otherwise)
+- Stage 4 — Connection loop: ✅ implemented (server stays running, handles sequential connections, graceful shutdown)
+- Stage 5 — Respond with body: ✅ implemented (sends response body, `Content-Type`, `Content-Length`)
+- Stage 6 — Read and parse headers: ✅ implemented (parses headers into a map, extracts `User-Agent` and `Content-Length`)
 
-| Test | Path       | Expected        | Got             | Status   |
-| ---- | ---------- | --------------- | --------------- | -------- |
-| 1    | `/`        | `200 OK`        | `200 OK`        | ✅ PASSED |
-| 2    | `/abcdefg` | `404 Not Found` | `404 Not Found` | ✅ PASSED |
+### Current behavior
 
+- `GET /` returns an HTML page with optional echoed headers and `User-Agent`.
+- `GET /api` returns JSON `{ "message": "Hello from API", "status": "success" }`.
+- Unknown paths return `404 Not Found` with an HTML body.
+- Malformed requests receive `400 Bad Request` and the server logs errors.
+- Basic curl tests for `/` and `/abcdefg` have passed locally.
 
-Next step: continue implementing theAdd connection loop — Server stays running, handles multiple requests
+### Next steps
+
+- Stage 7 — Read and handle POST request bodies: next priority.
+- Later: static file serving, concurrent clients (threads/async), persistent connections (keep-alive), and HTTP compression.
+
+If you want, I can now implement Stage 7 (POST body handling) next.
