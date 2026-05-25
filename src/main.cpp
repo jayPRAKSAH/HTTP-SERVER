@@ -125,15 +125,34 @@ int main(int argc, char **argv) {
 
     std::string path = request.substr(first_space + 1, second_space - first_space - 1);
 
-    // Determine response based on path
-    const char *response;
+    // Prepare response based on path
+    std::string response_body;
+    std::string status_line;
+    std::string content_type = "text/html";
+
     if (path == "/") {
-      response = "HTTP/1.1 200 OK\r\n\r\n";
+      status_line = "HTTP/1.1 200 OK\r\n";
+      response_body = "<h1>Welcome to HTTP Server</h1>\n<p>This is the home page.</p>";
+      content_type = "text/html";
+    } else if (path == "/api") {
+      status_line = "HTTP/1.1 200 OK\r\n";
+      response_body = "{\"message\": \"Hello from API\", \"status\": \"success\"}";
+      content_type = "application/json";
     } else {
-      response = "HTTP/1.1 404 Not Found\r\n\r\n";
+      status_line = "HTTP/1.1 404 Not Found\r\n";
+      response_body = "<h1>404 Not Found</h1>\n<p>The requested path does not exist.</p>";
+      content_type = "text/html";
     }
 
-    send(client_fd, response, strlen(response), 0);
+    // Build complete response with headers
+    std::string content_length = std::to_string(response_body.length());
+    std::string full_response = status_line +
+                                "Content-Type: " + content_type + "\r\n" +
+                                "Content-Length: " + content_length + "\r\n" +
+                                "\r\n" +
+                                response_body;
+
+    send(client_fd, full_response.c_str(), full_response.length(), 0);
 
     // Close only the client connection, NOT the server
     #ifdef _WIN32
