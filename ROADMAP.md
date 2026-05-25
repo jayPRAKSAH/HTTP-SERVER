@@ -35,7 +35,7 @@
 - [x] Proper resource cleanup (close only client_fd inside loop)
 - Tests: ✅ Multiple requests work, ✅ Malformed requests return 400
 
-**Stage 5: Respond with Body**
+### Stage 5: Respond with Body
 
 - [ ] Send response body with status line
 - [ ] Return different content for different paths
