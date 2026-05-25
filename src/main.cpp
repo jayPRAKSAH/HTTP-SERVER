@@ -62,42 +62,57 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  struct sockaddr_in client_addr;
-  int client_addr_len = sizeof(client_addr);
+  std::cout << "Server listening on port 4221...\n";
 
-  std::cout << "Waiting for a client to connect...\n";
+  while (true) {
+    struct sockaddr_in client_addr;
+    int client_addr_len = sizeof(client_addr);
 
-  int client_fd = accept(server_fd, (struct sockaddr *)&client_addr,
-                         (socklen_t *)&client_addr_len);
-  std::cout << "Client connected\n";
+    int client_fd = accept(server_fd, (struct sockaddr *)&client_addr,
+                           (socklen_t *)&client_addr_len);
+    if (client_fd < 0) {
+      std::cerr << "Failed to accept client connection\n";
+      continue;
+    }
 
-  // Read the HTTP request
-  char buffer[1024] = {0};
-  recv(client_fd, buffer, sizeof(buffer), 0);
+    std::cout << "Client connected\n";
 
-  // Parse the request line to extract the path
-  // Format: GET /path HTTP/1.1\r\n
-  std::string request(buffer);
-  size_t first_space = request.find(' ');
-  size_t second_space = request.find(' ', first_space + 1);
-  std::string path = request.substr(first_space + 1, second_space - first_space - 1);
+    // Read the HTTP request
+    char buffer[1024] = {0};
+    recv(client_fd, buffer, sizeof(buffer), 0);
 
-  // Determine response based on path
-  const char *response;
-  if (path == "/") {
-    response = "HTTP/1.1 200 OK\r\n\r\n";
-  } else {
-    response = "HTTP/1.1 404 Not Found\r\n\r\n";
+    // Parse the request line to extract the path
+    // Format: GET /path HTTP/1.1\r\n
+    std::string request(buffer);
+    size_t first_space = request.find(' ');
+    size_t second_space = request.find(' ', first_space + 1);
+    std::string path = request.substr(first_space + 1, second_space - first_space - 1);
+
+    // Determine response based on path
+    const char *response;
+    if (path == "/") {
+      response = "HTTP/1.1 200 OK\r\n\r\n";
+    } else {
+      response = "HTTP/1.1 404 Not Found\r\n\r\n";
+    }
+
+    send(client_fd, response, strlen(response), 0);
+
+    // Close only the client connection, NOT the server
+    #ifdef _WIN32
+    closesocket(client_fd);
+    #else
+    close(client_fd);
+    #endif
+
+    std::cout << "Client disconnected, waiting for next client...\n";
   }
 
-  send(client_fd, response, strlen(response), 0);
-
+  // Cleanup (never reached in infinite loop)
   #ifdef _WIN32
-  closesocket(client_fd);
   closesocket(server_fd);
   WSACleanup();
   #else
-  close(client_fd);
   close(server_fd);
   #endif
 
