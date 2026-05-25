@@ -37,10 +37,12 @@
 
 ### Stage 5: Respond with Body
 
-- [ ] Send response body with status line
-- [ ] Return different content for different paths
+- [x] Send response body with status line
+- [x] Return different content for different paths
+- [x] Add Content-Type header (text/html, application/json)
+- [x] Add Content-Length header
 - Example: `GET /` → HTML page, `GET /api` → JSON
-- Test: `curl http://localhost:4221/` returns HTML content
+- Tests: ✅ HTML response, ✅ JSON response, ✅ 404 with body
 
 **Stage 6: Read and Parse Headers**
 
@@ -116,5 +118,5 @@ for i in {1..5}; do curl http://localhost:4221/ & done
 
 ## Current Status
 
-- ✅ Stages 1-4 Complete
-- ⏳ Stage 5 (Respond with Body) - NEXT
+- ✅ Stages 1-5 Complete
+- ⏳ Stage 6 (Read and Parse Headers) - NEXT
