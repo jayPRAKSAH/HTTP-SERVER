@@ -21,11 +21,13 @@
   - `curl http://localhost:4221/test` → 404
 
 ## Phase 2: Request/Response Enhancement
-**Stage 4: Connection Loop** (REQUIRED FIRST)
-- [ ] Wrap accept() in a loop
-- [ ] Server handles multiple sequential connections
-- [ ] Doesn't exit after first request
-- Test: Multiple curl requests in succession work
+✅ **Stage 4: Connection Loop**
+- [x] Wrap accept() in a loop
+- [x] Server handles multiple sequential connections
+- [x] Graceful shutdown (Ctrl+C)
+- [x] Error handling for malformed requests
+- [x] Proper resource cleanup (close only client_fd inside loop)
+- Tests: ✅ Multiple requests work, ✅ Malformed requests return 400
 
 **Stage 5: Respond with Body**
 - [ ] Send response body with status line
@@ -97,5 +99,5 @@ for i in {1..5}; do curl http://localhost:4221/ & done
 ```
 
 ## Current Status
-- ✅ Stages 1-3 Complete
-- ⏳ Stage 4 (Connection Loop) - NEXT
+- ✅ Stages 1-4 Complete
+- ⏳ Stage 5 (Respond with Body) - NEXT
