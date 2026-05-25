@@ -46,10 +46,12 @@
 
 **Stage 6: Read and Parse Headers**
 
-- [ ] Extract headers from HTTP request
-- [ ] Use headers for logic (Content-Length, User-Agent, etc.)
-- [ ] Echo back headers in response
-- Test: `curl -H "X-Custom: value" http://localhost:4221/` shows header
+- [x] Extract headers from HTTP request
+- [x] Parse User-Agent header
+- [x] Parse Content-Length header
+- [x] Store headers in map for quick lookup
+- [x] Echo headers back in response
+- Tests: ✅ Custom headers, ✅ User-Agent extraction, ✅ Content-Length parsing
 
 **Stage 7: POST Request Body**
 
@@ -118,5 +120,5 @@ for i in {1..5}; do curl http://localhost:4221/ & done
 
 ## Current Status
 
-- ✅ Stages 1-5 Complete
-- ⏳ Stage 6 (Read and Parse Headers) - NEXT
+- ✅ Stages 1-6 Complete
+- ⏳ Stage 7 (POST Request Body) - NEXT
